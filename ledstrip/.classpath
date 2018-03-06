@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" output="target/classes" path="src/main/java">
 		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="ledstrip/dll"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
@@ -34,5 +35,55 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/rxtx-2.1.7.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-mqtt-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-serial-jssc-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-serial-rxtx-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-camel-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-console-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-base-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-beans-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-bluetooth-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-digispark-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-mqtt-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-nodemcu-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-proxy-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-raspberry-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-util-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-core-virtual-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-legacy-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-mail-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-networkproxyserver-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/ardulink-swing-2.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/args4j-2.32.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/bluecove-2.1.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/camel-core-2.17.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/camel-mail-2.17.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/camel-mqtt-2.17.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/hawtbuf-1.11.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/hawtdispatch-1.22.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/hawtdispatch-transport-1.22.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/HdrHistogram-2.1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/javax.mail-1.5.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/jaxb-core-2.2.11.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/jaxb-impl-2.2.11.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/jssc-2.8.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/mapdb-1.0.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/moquette-broker-0.8.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/moquette-netty-parser-0.8.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/moquette-parser-commons-0.8.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/mqtt-client-1.14.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/netty-buffer-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/netty-codec-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/netty-codec-http-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/netty-common-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/netty-handler-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/netty-transport-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/pi4j-core-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/slf4j-api-1.7.12.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/slf4j-jdk14-1.7.12.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/slf4j-log4j12-1.7.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/usb-0.5.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Renaud/Downloads/Ardulink/ardulink/lib/validation-api-1.0.0.GA.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
