@@ -24,10 +24,11 @@ public class Mqtt{
 	public void connect() throws MqttException{
 		System.out.println("Connecting to broker: "+broker);
 		client.connect(connOpts);
+		client.subscribe("houlouhome/mqttstrip/setpower");
 		System.out.println("Connected");
 	}
 
-	public void deconnection() throws MqttException{
+	public void disconnect() throws MqttException{
 		System.out.println("Disconnecting ...");
 		client.disconnect();
 		System.out.println("Disconnected");

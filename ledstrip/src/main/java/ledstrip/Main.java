@@ -7,8 +7,8 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 public class Main {
 
 	public static void main(String[] args) {
-		Serial serial = new Serial();
-		serial.serialTest();
+		// Serial serial = new Serial();
+		// serial.serialTest();
 		
 		try {
 			Mqtt mqtt = new Mqtt();
@@ -18,6 +18,7 @@ public class Main {
 			TimeUnit.SECONDS.sleep(10);
 			
 			mqtt.sendMessage("houlouhome/mqttstrip/getpower", "OFF");
+			mqtt.disconnect();
 			
 		} catch (MqttException me) {
 			printException(me);
