@@ -7,27 +7,38 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 public class Main {
 
 	public static void main(String[] args) {
-		// Serial serial = new Serial();
-		// serial.serialTest();
+		Mediator.setSerial(new Serial());
 		
 		try {
-			Mqtt mqtt = new Mqtt();
-			mqtt.connect();
-			mqtt.sendMessage("houlouhome/mqttstrip/getpower", "ON");
-			
-			TimeUnit.SECONDS.sleep(10);
-			
-			mqtt.sendMessage("houlouhome/mqttstrip/getpower", "OFF");
-			mqtt.disconnect();
+			Mediator.setMqtt(new Mqtt());
+			Mediator.getMqtt().connect();
+//			Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "ON");
+//			
+//			TimeUnit.SECONDS.sleep(30);
+//			
+//			Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "OFF");
+//			Mediator.getMqtt().disconnect();
 			
 		} catch (MqttException me) {
 			printException(me);
 			
-		} catch (InterruptedException ie) {
-			ie.printStackTrace();
 		}
 		
+		Mediator.getSerial().serialTest();
+		
+		loop();
+		
 		System.exit(0);
+	}
+	
+	private static void loop(){
+		while(!Mediator.stopped()){
+			try {
+				TimeUnit.SECONDS.sleep(5);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private static void printException(MqttException me){

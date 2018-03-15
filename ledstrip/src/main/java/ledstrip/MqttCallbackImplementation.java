@@ -5,13 +5,19 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class MqttCallbackImplementation implements MqttCallback {
-	
+
 	public void connectionLost(Throwable throwable) {
 		System.out.println("Connection to MQTT broker lost!");
 	}
 
 	public void messageArrived(String s, MqttMessage mqttMessage){
-		System.out.println("Message received:\n\t"+ new String(mqttMessage.getPayload()) );
+		String message = new String(mqttMessage.getPayload());
+		System.out.println("Mqtt message received:\n\t"+ message);
+		
+		if(message.equals("ON"))
+			Mediator.getSerial().sendMessage("1");
+		else if(message.equals("OFF"))
+			Mediator.getSerial().sendMessage("0");
 	}
 
 	public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {

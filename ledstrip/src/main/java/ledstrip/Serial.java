@@ -7,17 +7,42 @@ import org.ardulink.core.convenience.Links;
 import org.ardulink.core.events.CustomEvent;
 import org.ardulink.core.events.CustomListener;
 import org.ardulink.util.URIs;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 public class Serial implements CustomListener{
 	final String MSG_START = "SERIAL";
-	Link link = Links.getLink(URIs.newURI("ardulink://serial-jssc?port=COM3&baudrate=9600&pingprobe=false"));
+	private Link link;
+
+	public Serial() {
+		link = Links.getLink(URIs.newURI("ardulink://serial-jssc?port=COM3&baudrate=9600&pingprobe=false"));
+
+		try {
+			link.addCustomListener(this);
+			System.out.println("Serial listener set");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void sendMessage(String message){
+		try {
+			link.sendCustomMessage(MSG_START + message);
+			System.out.println("Serial message sent");
+
+		} catch (IOException e) {
+			System.out.println("can't send serial message");
+			e.printStackTrace();
+		}
+	}
 
 	public void serialTest(){
 		try {
-			link.sendCustomMessage("1");
-			
+			link.sendCustomMessage(MSG_START + "kleine_petit_message");
+			System.out.println("Serial test message sent");
+
 		} catch (IOException e) {
-			System.out.println("can't send custom message");
+			System.out.println("can't send serial test message");
 			e.printStackTrace();
 		}
 	}
@@ -26,10 +51,18 @@ public class Serial implements CustomListener{
 	public void customEventReceived(CustomEvent event) {
 		String messageString = event.getMessage();
 
-        if (messageString.startsWith(MSG_START)) {
-            messageString = messageString.substring(MSG_START.length());
-            
-        }		
+		if (messageString.startsWith(MSG_START)) {
+			messageString = messageString.substring(MSG_START.length());
+			System.out.println("Serial message received: " + messageString);
+			try {
+				if(messageString.equals("0"))
+					Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "OFF");
+				else if(messageString.equals("1"))
+					Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "ON");
+			} catch (MqttException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
