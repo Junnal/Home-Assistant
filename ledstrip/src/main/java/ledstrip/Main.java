@@ -7,40 +7,57 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 public class Main {
 
 	public static void main(String[] args) {
-		Mediator.setSerial(new Serial());
+		/*
+		 * Serial Initialization
+		 */
 		
+		Serial serial = new Serial();
+		serial.connect();
+		Mediator.setSerial(serial);
+
+		/*
+		 * Mqtt Initialization
+		 */
+		
+		Mqtt mqtt = null;
+
 		try {
-			Mediator.setMqtt(new Mqtt());
-			Mediator.getMqtt().connect();
-//			Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "ON");
-//			
-//			TimeUnit.SECONDS.sleep(30);
-//			
-//			Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "OFF");
-//			Mediator.getMqtt().disconnect();
-			
+			mqtt = new Mqtt();
+			mqtt.connect();
+			mqtt.subscribeAll();
 		} catch (MqttException me) {
 			printException(me);
-			
 		}
-		
+
+		Mediator.setMqtt(mqtt);
+
+		/*
+		 * Test connection and launch loop
+		 */
+
 		Mediator.getSerial().serialTest();
-		
+
 		loop();
-		
+
 		System.exit(0);
 	}
-	
+
 	private static void loop(){
 		while(!Mediator.stopped()){
-			try {
-				TimeUnit.SECONDS.sleep(5);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+
+			waitForIt(5);
+
 		}
 	}
-	
+
+	private static void waitForIt(int time){
+		try {
+			TimeUnit.SECONDS.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private static void printException(MqttException me){
 		System.out.println("reason "+me.getReasonCode());
 		System.out.println("msg "+me.getMessage());

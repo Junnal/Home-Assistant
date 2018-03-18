@@ -1,6 +1,8 @@
 package ledstrip;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import org.ardulink.core.Link;
 import org.ardulink.core.convenience.Links;
@@ -9,19 +11,60 @@ import org.ardulink.core.events.CustomListener;
 import org.ardulink.util.URIs;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
+import jssc.SerialPortList;
+
 public class Serial implements CustomListener{
 	final String MSG_START = "SERIAL";
+	final String PORT = "COM3";
+	final String BAUDRATE = "9600";
+	final String PINGPROBE = "false";
+	
 	private Link link;
+	private boolean connected = false;
+	private boolean listenerSet = false;
 
 	public Serial() {
-		link = Links.getLink(URIs.newURI("ardulink://serial-jssc?port=COM3&baudrate=9600&pingprobe=false"));
+		
+	}
+	
+	public void connect(){
+		while(!listenerSet){
+			System.out.println("Attempting Serial connection");
+			
+			String[] PortList = SerialPortList.getPortNames();
+			System.out.print("Available ports: ");
+			
+			for (String port : PortList) {
+				System.out.print(port + " ");
+			}
+			
+			System.out.println(".");
+			
+			if(Arrays.asList(PortList).contains(PORT)){
+				link = Links.getLink(URIs.newURI("ardulink://serial-jssc?port=" + PORT + "&baudrate=" + BAUDRATE + "&pingprobe=" + PINGPROBE));
+				//link = Links.getLink(URIs.newURI("ardulink://serial-jssc?port=COM3&baudrate=9600&pingprobe=false"));
+				connected = true;
+				
+				System.out.println("Serial connection established");
+			}
+			
+			if(connected){
+				try {
+					link.addCustomListener(this);
+					listenerSet = true;
+					
+					System.out.println("Serial listener set");
 
-		try {
-			link.addCustomListener(this);
-			System.out.println("Serial listener set");
-
-		} catch (IOException e) {
-			e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			try {
+				TimeUnit.SECONDS.sleep(5);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -1,5 +1,7 @@
 package ledstrip;
 
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -22,11 +24,22 @@ public class Mqtt{
 		connOpts.setCleanSession(true);
 	}
 
-	public void connect() throws MqttException{
-		System.out.println("Connecting to MQTT broker: "+broker);
-		client.connect(connOpts);
-		for (String topic : subTopics) {
-			client.subscribe(topic);
+	public void connect(){
+		while(!client.isConnected()){
+			System.out.println("Connecting to MQTT broker: " + broker);
+			
+			try {
+				client.connect(connOpts);
+				
+			} catch (MqttException me) {
+				me.printStackTrace();
+			}
+			
+			try {
+				TimeUnit.SECONDS.sleep(5);
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
 		}
 		System.out.println("Connected");
 	}
@@ -47,8 +60,15 @@ public class Mqtt{
 		System.out.println("MQTT message published");
 	}
 	
+	public void subscribeAll() throws MqttException{
+		for (String topic : subTopics) {
+			subscribe(topic);
+		}
+	}
+	
 	public void subscribe(String topic) throws MqttException{
 		client.subscribe(topic);
+		System.out.println("Subscribed to " + topic);
 	}
 
 
