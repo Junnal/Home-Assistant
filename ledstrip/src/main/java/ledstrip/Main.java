@@ -22,18 +22,18 @@ public class Main {
 		mqtt = new Mqtt();
 		mqtt.connect();
 		mqtt.subscribeAll();
-
 		Mediator.setMqtt(mqtt);
 
 		/*
 		 * Test connection and launch loop
 		 */
 
-		waitForIt(5);
-		
 		Mediator.getSerial().serialTest();
 
 		loop();
+		
+		serial.disconnect();
+		mqtt.disconnect();
 
 		System.exit(0);
 	}

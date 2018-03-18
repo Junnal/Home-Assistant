@@ -7,11 +7,11 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class Mqtt{
 
-	int qos             = 0;
-	String broker       = "tcp://localhost:1883";
-	String clientId     = "ArdulinkMQTT";
-	String[] subTopics	= {"houlouhome/mqttstrip/setpower"};
-
+	final private int QOS				= 0;
+	final private String BROKER			= "tcp://localhost:1883";
+	final private String CLIENT_ID		= "ArdulinkMQTT";
+	final private String TOPIC_HEADER	= "houlouhome/mqttstrip/";
+	
 	MemoryPersistence persistence;
 	MqttClient client;
 	MqttConnectOptions connOpts;
@@ -20,7 +20,7 @@ public class Mqtt{
 		persistence = new MemoryPersistence();
 		
 		try {
-			client = new MqttClient(broker, clientId, persistence);
+			client = new MqttClient(BROKER, CLIENT_ID, persistence);
 		} catch (MqttException me) {
 			printException(me);
 		}
@@ -28,11 +28,13 @@ public class Mqtt{
 		client.setCallback( new MqttCallbackImplementation() );
 		connOpts = new MqttConnectOptions();
 		connOpts.setCleanSession(true);
+		connOpts.setUserName(CLIENT_ID);
+		connOpts.setPassword("Luciano".toCharArray());
 	}
 
 	public void connect(){
 		while(!client.isConnected()){
-			System.out.println("Connecting to MQTT broker: " + broker);
+			System.out.println("Connecting to MQTT broker: " + BROKER);
 			
 			try {
 				client.connect(connOpts);
@@ -62,10 +64,10 @@ public class Mqtt{
 	
 	public void sendMessage(String topic, String message){
 		if(client.isConnected()){
-			System.out.println("Publishing MQTT message: "+message);
+			System.out.println("Publishing MQTT message:\n\t" + message);
 			MqttMessage mqttMessage = new MqttMessage(message.getBytes());
 
-			mqttMessage.setQos(qos);
+			mqttMessage.setQos(QOS);
 
 			try {
 				client.publish(topic, mqttMessage);
@@ -75,24 +77,59 @@ public class Mqtt{
 				me.printStackTrace();
 			}
 			
-			System.out.println("MQTT message published");
+			System.out.println("MQTT message published"   + '\n');
 		}
 		else System.out.println("Can't publish MQTT message: client disconnected");
 	}
 	
 	public void subscribeAll(){
-		for (String topic : subTopics) {
-			subscribe(topic);
+		for (SubTopics subTopic : SubTopics.values()) {
+			subscribe(subTopic.toString());
 		}
 	}
 	
 	public void subscribe(String topic){
 		try {
-			client.subscribe(topic);
+			client.subscribe(TOPIC_HEADER + "set" + topic);
 			System.out.println("Subscribed to " + topic);
 		} catch (MqttException me) {
 			printException(me);
 		}
+	}
+	
+	public void processMessage(SubTopics subTopic, String toTranslate) {
+		boolean isValid = false;
+		String message = "";
+		
+		switch(subTopic){
+			case power:
+				if(toTranslate.equals("ON")){
+					message = "1";
+					isValid = true;
+				}
+				else if(toTranslate.equals("OFF")){
+					message = "0";
+					isValid = true;
+				}
+				break;
+				
+			case rgb:
+				String[] colors = toTranslate.split(",");
+				boolean inRange = false;
+				for(String color : colors){
+					int value = Integer.parseInt(color);
+					if(value >= 0 && value <= 255) inRange = true;
+				}
+				if(colors.length == 3 && inRange){
+					message = "C";
+					for(String color : colors) message += "_" + color;
+					isValid = true;
+				}
+			default:
+				break;
+		}
+		
+		if(isValid) Mediator.getSerial().sendMessage(message);
 	}
 
 	private static void printException(MqttException me){
@@ -103,4 +140,5 @@ public class Mqtt{
 		System.out.println("excep "+me);
 		me.printStackTrace();
 	}
+	
 }

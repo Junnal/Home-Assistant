@@ -13,10 +13,10 @@ import org.ardulink.util.URIs;
 import jssc.SerialPortList;
 
 public class Serial implements CustomListener{
-	final String MSG_START = "SERIAL";
-	final String PORT = "COM3";
-	final String BAUDRATE = "9600";
-	final String PINGPROBE = "false";
+	final String MSG_START =	"SERIAL";
+	final String PORT =			"COM3";
+	final String BAUDRATE =		"9600";
+	final String PINGPROBE =	"false";
 
 	private Link link;
 	private boolean connected = false;
@@ -32,11 +32,9 @@ public class Serial implements CustomListener{
 
 			String[] PortList = SerialPortList.getPortNames();
 			System.out.print("Available ports: ");
-
 			for (String port : PortList) {
 				System.out.print(port + " ");
 			}
-
 			System.out.println(".");
 
 			if(Arrays.asList(PortList).contains(PORT)){
@@ -66,11 +64,22 @@ public class Serial implements CustomListener{
 			}
 		}
 	}
+	
+	public void disconnect(){
+		try {
+			link.removeCustomListener(this);
+			link.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
 	public void sendMessage(String message){
 		try {
 			link.sendCustomMessage(MSG_START + message);
-			System.out.println("Serial message sent");
+			System.out.println("Serial message sent:\n\t" + message + '\n');
 
 		} catch (IOException e) {
 			System.out.println("can't send serial message");
@@ -80,7 +89,7 @@ public class Serial implements CustomListener{
 
 	public void serialTest(){
 		try {
-			link.sendCustomMessage(MSG_START + "kleine_petit_message");
+			link.sendCustomMessage(MSG_START + "kleine_petit_message"  + '\n');
 			System.out.println("Serial test message sent");
 
 		} catch (IOException e) {
@@ -95,8 +104,8 @@ public class Serial implements CustomListener{
 
 		if (messageString.startsWith(MSG_START)) {
 			messageString = messageString.substring(MSG_START.length());
-			System.out.println("Serial message received: " + messageString);
-			
+			System.out.println("Serial message received:\n\t" + messageString  + '\n');
+
 			if(messageString.equals("0"))
 				Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "OFF");
 			else if(messageString.equals("1"))
