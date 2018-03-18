@@ -2,8 +2,6 @@ package ledstrip;
 
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.paho.client.mqttv3.MqttException;
-
 public class Main {
 
 	public static void main(String[] args) {
@@ -21,13 +19,9 @@ public class Main {
 		
 		Mqtt mqtt = null;
 
-		try {
-			mqtt = new Mqtt();
-			mqtt.connect();
-			mqtt.subscribeAll();
-		} catch (MqttException me) {
-			printException(me);
-		}
+		mqtt = new Mqtt();
+		mqtt.connect();
+		mqtt.subscribeAll();
 
 		Mediator.setMqtt(mqtt);
 
@@ -35,6 +29,8 @@ public class Main {
 		 * Test connection and launch loop
 		 */
 
+		waitForIt(5);
+		
 		Mediator.getSerial().serialTest();
 
 		loop();
@@ -56,15 +52,6 @@ public class Main {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private static void printException(MqttException me){
-		System.out.println("reason "+me.getReasonCode());
-		System.out.println("msg "+me.getMessage());
-		System.out.println("loc "+me.getLocalizedMessage());
-		System.out.println("cause "+me.getCause());
-		System.out.println("excep "+me);
-		me.printStackTrace();
 	}
 
 }

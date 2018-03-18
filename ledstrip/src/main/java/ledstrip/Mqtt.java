@@ -16,9 +16,15 @@ public class Mqtt{
 	MqttClient client;
 	MqttConnectOptions connOpts;
 
-	public Mqtt() throws MqttException {
+	public Mqtt(){
 		persistence = new MemoryPersistence();
-		client = new MqttClient(broker, clientId, persistence);
+		
+		try {
+			client = new MqttClient(broker, clientId, persistence);
+		} catch (MqttException me) {
+			printException(me);
+		}
+		
 		client.setCallback( new MqttCallbackImplementation() );
 		connOpts = new MqttConnectOptions();
 		connOpts.setCleanSession(true);
@@ -44,32 +50,57 @@ public class Mqtt{
 		System.out.println("Connected");
 	}
 
-	public void disconnect() throws MqttException{
+	public void disconnect(){
 		System.out.println("Disconnecting from MQTT broker...");
-		client.disconnect();
+		try {
+			client.disconnect();
+		} catch (MqttException me) {
+			me.printStackTrace();
+		}
 		System.out.println("Disconnected");
 	}
 	
-	public void sendMessage(String topic, String message) throws MqttException{
-		System.out.println("Publishing MQTT message: "+message);
-		MqttMessage mqttMessage = new MqttMessage(message.getBytes());
+	public void sendMessage(String topic, String message){
+		if(client.isConnected()){
+			System.out.println("Publishing MQTT message: "+message);
+			MqttMessage mqttMessage = new MqttMessage(message.getBytes());
 
-		mqttMessage.setQos(qos);
+			mqttMessage.setQos(qos);
 
-		client.publish(topic, mqttMessage);
-		System.out.println("MQTT message published");
+			try {
+				client.publish(topic, mqttMessage);
+			} catch (MqttPersistenceException e) {
+				e.printStackTrace();
+			} catch (MqttException me) {
+				me.printStackTrace();
+			}
+			
+			System.out.println("MQTT message published");
+		}
+		else System.out.println("Can't publish MQTT message: client disconnected");
 	}
 	
-	public void subscribeAll() throws MqttException{
+	public void subscribeAll(){
 		for (String topic : subTopics) {
 			subscribe(topic);
 		}
 	}
 	
-	public void subscribe(String topic) throws MqttException{
-		client.subscribe(topic);
-		System.out.println("Subscribed to " + topic);
+	public void subscribe(String topic){
+		try {
+			client.subscribe(topic);
+			System.out.println("Subscribed to " + topic);
+		} catch (MqttException me) {
+			printException(me);
+		}
 	}
 
-
+	private static void printException(MqttException me){
+		System.out.println("reason "+me.getReasonCode());
+		System.out.println("msg "+me.getMessage());
+		System.out.println("loc "+me.getLocalizedMessage());
+		System.out.println("cause "+me.getCause());
+		System.out.println("excep "+me);
+		me.printStackTrace();
+	}
 }

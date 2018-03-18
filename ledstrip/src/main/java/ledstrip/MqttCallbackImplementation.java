@@ -2,7 +2,6 @@ package ledstrip;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class MqttCallbackImplementation implements MqttCallback {
@@ -10,6 +9,7 @@ public class MqttCallbackImplementation implements MqttCallback {
 	public void connectionLost(Throwable throwable) {
 		System.out.println("Connection to MQTT broker lost!");
 		Mediator.getMqtt().connect();
+		Mediator.getMqtt().subscribeAll();
 	}
 
 	public void messageArrived(String s, MqttMessage mqttMessage){
