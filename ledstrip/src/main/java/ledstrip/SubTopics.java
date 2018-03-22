@@ -2,5 +2,7 @@ package ledstrip;
 
 public enum SubTopics {
 	power,
-	rgb
+	rgb,
+	brightness,
+	mode
 }

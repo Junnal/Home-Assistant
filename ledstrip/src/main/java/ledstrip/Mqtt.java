@@ -2,6 +2,10 @@ package ledstrip;
 
 import java.util.concurrent.TimeUnit;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -11,12 +15,34 @@ public class Mqtt{
 	final private String BROKER			= "tcp://localhost:1883";
 	final private String CLIENT_ID		= "ArdulinkMQTT";
 	final private String TOPIC_HEADER	= "houlouhome/mqttstrip/";
+	final private String FILENAME = "data/password.txt";
 	
 	MemoryPersistence persistence;
 	MqttClient client;
 	MqttConnectOptions connOpts;
 
 	public Mqtt(){
+		String password = "";
+		FileReader fr = null;
+		BufferedReader br = null;
+		try {
+			fr = new FileReader(FILENAME);
+			br = new BufferedReader(fr);
+			String pw;
+			if((pw = br.readLine()) != null) password = pw;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+				if (fr != null)
+					fr.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
 		persistence = new MemoryPersistence();
 		
 		try {
@@ -29,7 +55,7 @@ public class Mqtt{
 		connOpts = new MqttConnectOptions();
 		connOpts.setCleanSession(true);
 		connOpts.setUserName(CLIENT_ID);
-		connOpts.setPassword("Luciano".toCharArray());
+		connOpts.setPassword(password.toCharArray());
 	}
 
 	public void connect(){
@@ -115,16 +141,30 @@ public class Mqtt{
 				
 			case rgb:
 				String[] colors = toTranslate.split(",");
-				boolean inRange = false;
+				boolean inRange = true;
 				for(String color : colors){
 					int value = Integer.parseInt(color);
-					if(value >= 0 && value <= 255) inRange = true;
+					if(value < 0 || value > 255) inRange = false;
 				}
 				if(colors.length == 3 && inRange){
 					message = "C";
 					for(String color : colors) message += "_" + color;
 					isValid = true;
 				}
+				break;
+			
+			case brightness:
+				int value = Integer.parseInt(toTranslate);
+				if(value <= 255 && value >= 0) {
+					isValid = true;
+					message = "B_" + toTranslate;
+				}
+				break;
+				
+			case mode:
+				
+				break;
+				
 			default:
 				break;
 		}

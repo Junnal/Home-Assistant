@@ -15,7 +15,7 @@ import jssc.SerialPortList;
 public class Serial implements CustomListener{
 	final String MSG_START =	"SERIAL";
 	final String PORT =			"COM3";
-	final String BAUDRATE =		"9600";
+	final String BAUDRATE =		"230400";
 	final String PINGPROBE =	"false";
 
 	private Link link;
