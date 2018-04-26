@@ -162,7 +162,7 @@ public class Mqtt{
 				break;
 				
 			case mode:
-				for(Modes mode : Modes.values()){
+				for(Mode mode : Mode.values()){
 					if(toTranslate.equals(mode.name())){
 						isValid = true;
 						message = mode.toSerial();

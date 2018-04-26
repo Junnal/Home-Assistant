@@ -15,12 +15,13 @@ import jssc.SerialPortList;
 public class Serial implements CustomListener{
 	final String MSG_START =	"SERIAL";
 	final String PORT =			"COM3";
-	final String BAUDRATE =		"230400";
+	final String BAUDRATE =		"115200";
 	final String PINGPROBE =	"false";
 
 	private Link link;
 	private boolean connected = false;
 	private boolean listenerSet = false;
+	private String lastMessage = "";
 
 	public Serial() {
 
@@ -76,24 +77,41 @@ public class Serial implements CustomListener{
 		
 	}
 
+	public void processMessage(String message){
+		switch(message.charAt(0)){
+		case '1':
+			Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "ON");
+			break;
+		case 'B':
+			Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getbrightness", message.substring(message.indexOf('_') +1));
+			break;
+		case 'C':
+			int index1 = message.indexOf('_');
+			int index2 = message.indexOf('_', index1 + 1);
+			int index3 = message.indexOf('_', index2 + 1);
+			
+			int r = Integer.parseInt(message.substring(index1 + 1, index2));
+			int g = Integer.parseInt(message.substring(index2 + 1, index3));
+			int b = Integer.parseInt(message.substring(index3 + 1));
+			
+			Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getcolor", r + "," + g + "," +b);
+			break;
+		case '0':
+		default:
+			Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "OFF");
+			break;
+		}
+	}
+	
 	public void sendMessage(String message){
+		lastMessage = message;
+		
 		try {
 			link.sendCustomMessage(MSG_START + message);
 			System.out.println("Serial message sent:\n\t" + message + '\n');
 
 		} catch (IOException e) {
 			System.out.println("can't send serial message");
-			e.printStackTrace();
-		}
-	}
-
-	public void serialTest(){
-		try {
-			link.sendCustomMessage(MSG_START + "kleine_petit_message"  + '\n');
-			System.out.println("Serial test message sent");
-
-		} catch (IOException e) {
-			System.out.println("can't send serial test message");
 			e.printStackTrace();
 		}
 	}
@@ -105,11 +123,9 @@ public class Serial implements CustomListener{
 		if (messageString.startsWith(MSG_START)) {
 			messageString = messageString.substring(MSG_START.length());
 			System.out.println("Serial message received:\n\t" + messageString  + '\n');
-
-			if(messageString.equals("0"))
-				Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "OFF");
-			else if(messageString.equals("1"))
-				Mediator.getMqtt().sendMessage("houlouhome/mqttstrip/getpower", "ON");
+			
+			if(messageString.equals("resent")) sendMessage(lastMessage);
+			else processMessage(messageString);
 		}
 	}
 

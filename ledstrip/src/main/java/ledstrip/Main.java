@@ -25,10 +25,8 @@ public class Main {
 		Mediator.setMqtt(mqtt);
 
 		/*
-		 * Test connection and launch loop
+		 * Launch loop
 		 */
-
-		Mediator.getSerial().serialTest();
 
 		loop();
 		
@@ -40,9 +38,7 @@ public class Main {
 
 	private static void loop(){
 		while(!Mediator.stopped()){
-
-			waitForIt(5);
-
+			waitForIt(10);
 		}
 	}
 

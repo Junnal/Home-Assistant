@@ -1,12 +1,14 @@
 package ledstrip;
 
-public enum Modes {
+public enum Mode {
 	chase("c"),
-	normal("n");
+	normal("n"),
+	stars("s"),
+	wave("w");
 	
 	private String value;
 	
-	Modes(String value){
+	Mode(String value){
 		this.value = value;
 	}
 	
